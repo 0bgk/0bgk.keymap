@@ -1,0 +1,23 @@
+# QMK Firmware (not needed in this repo)
+qmk_firmware/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Compiled firmware files
+*.bin
+*.hex
+*.elf
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+.build/
