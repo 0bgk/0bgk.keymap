@@ -24,26 +24,30 @@
 //          - S/D/F: Previous/Play/Next track
 //          - H/J/K/L: Vim-style arrow keys
 
-// Optimize tap-hold behavior for fast typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case CTL_T(KC_ESC):
-            return 150; // Faster response for ESC/Ctrl key
         case LT(1, KC_SPC):
-            return 150; // Faster response for Space/Fn key
+            return 200;
         default:
             return TAPPING_TERM;
     }
 }
 
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case CTL_T(KC_ESC):
-            return false; // Prioritize tap for rapid ESC presses
         case LT(1, KC_SPC):
-            return false; // Prioritize tap for rapid Space presses
+            return false;
         default:
             return false;
+    }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(1, KC_SPC):
+            return 120;
+        default:
+            return 0;
     }
 }
 
