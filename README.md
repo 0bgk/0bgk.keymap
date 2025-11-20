@@ -21,7 +21,7 @@ Custom HHKB-inspired layout optimized for Vim users with media controls:
 - CAPS in top-left position
 - Standard QWERTY layout
 - Right Shift doubles as TG(1) - toggle Layer 1 permanently
-- Optimized tap-hold timing (150ms) for responsive typing without delays
+- Optimized tap-hold timing (200ms for Space/Fn, 150ms for Ctrl/ESC) to prevent accidental layer activation while typing
 
 **Layer 1 (Function Layer)** - Hold Space to activate:
 - F1-F13 and Print on top row
