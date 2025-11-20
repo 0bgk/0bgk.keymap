@@ -11,20 +11,27 @@ Personal keymap configuration for KBD6x keyboard.
 
 ## Keymap Features
 
-### HHKB Layout (Recommended)
+### HHKB Layout
 
-Custom HHKB-inspired layout with Vim-style navigation:
+Custom HHKB-inspired layout optimized for Vim users with media controls:
 
 **Layer 0 (Base Layer):**
-- ESC in CAPS position (tap for ESC, hold for Layer 1 - Fn key)
+- **CAPS position** → `CTL_T(KC_ESC)`: Tap for ESC, Hold for Control
+- **Space** → `LT(1, KC_SPC)`: Tap for Space, Hold for Layer 1 (Fn)
 - CAPS in top-left position
 - Standard QWERTY layout
 - Right Shift doubles as TG(1) - toggle Layer 1 permanently
-- Optimized tap-hold timing (150ms) for responsive ESC key
+- Optimized tap-hold timing (150ms) for responsive typing without delays
 
-**Layer 1 (Function Layer):**
+**Layer 1 (Function Layer)** - Hold Space to activate:
 - F1-F13 and Print on top row
 - **Vim-style arrow keys**: H (←), J (↓), K (↑), L (→)
+- **Media controls**:
+  - E: Volume Up
+  - S: Previous Track
+  - D: Play/Pause
+  - F: Next Track
+  - C: Volume Down
 - LCTL and RCTL available on bottom corners
 - DELETE on top-left
 
@@ -60,38 +67,34 @@ See [QMK Setup Guide](https://docs.qmk.fm/#/newbs_getting_started)
 
 ### 1. Setup QMK
 
-Clone QMK Firmware and setup your environment:
+Clone QMK Firmware:
 
 ```bash
 # Clone QMK firmware
 git clone https://github.com/qmk/qmk_firmware.git
-cd qmk_firmware
-
-# Setup QMK (first time only)
-qmk setup
 ```
 
 ### 2. Install Your Keymap
 
-Copy your preferred keymap to QMK:
+Copy your keymap to QMK:
 
 ```bash
-# For HHKB layout (recommended)
-cp -r /path/to/0bgk.keymap/keymaps/hhkb keyboards/kbdfans/kbd6x/keymaps/
+# Initialize submodules (first time only)
+cd qmk_firmware
+git submodule update --init --recursive
 
-# Or for other layouts:
-# cp -r /path/to/0bgk.keymap/keymaps/default keyboards/kbdfans/kbd6x/keymaps/
-# cp -r /path/to/0bgk.keymap/keymaps/hhkb-default keyboards/kbdfans/kbd6x/keymaps/
+# Copy HHKB layout
+cp -r /path/to/0bgk.keymap/keymaps/hhkb keyboards/kbdfans/kbd6x/keymaps/
 ```
 
 ### 3. Compile Firmware
 
 ```bash
-# Compile for HHKB layout
+# Compile HHKB layout
 qmk compile -kb kbdfans/kbd6x -km hhkb
 
 # The compiled firmware will be at:
-# kbdfans_kbd6x_hhkb.hex
+# qmk_firmware/kbdfans_kbd6x_hhkb.hex
 ```
 
 ## Flashing
@@ -143,11 +146,9 @@ When in bootloader mode, the `qmk flash` command will detect it automatically an
 ```
 .
 ├── keyboard.json      # Main keyboard hardware configuration
-├── keymaps/          # Keymap layouts
-│   ├── default/      # Standard layout
-│   ├── hhkb/         # Custom HHKB layout with Vim arrows (recommended)
-│   ├── hhkb-default/ # Basic HHKB layout
-│   └── hhkb-default-improved/
+├── keymaps/
+│   └── hhkb/         # Custom HHKB layout with Vim navigation and media controls
+│       └── keymap.c  # Main keymap configuration
 ├── LICENSE           # GPL v2.0 License
 └── README.md         # This file
 ```
@@ -156,19 +157,23 @@ When in bootloader mode, the `qmk flash` command will detect it automatically an
 
 To customize your keymap:
 
-1. Edit `keymaps/hhkb/keymap.c` (or your preferred layout)
+1. Edit `keymaps/hhkb/keymap.c`
 2. Modify the key mappings in the `keymaps` array
-3. Recompile and flash
+3. Adjust tap-hold timing in `get_tapping_term()` if needed (default: 150ms)
+4. Recompile and flash
 
 ### Common Keycodes
 
 - `KC_TRNS` - Transparent (use key from lower layer)
 - `LT(layer, kc)` - Tap for keycode, hold for layer
+- `CTL_T(kc)` - Tap for keycode, hold for Control
 - `TG(layer)` - Toggle layer on/off
 - `MO(layer)` - Momentary layer while held
 - `KC_ESC`, `KC_TAB`, `KC_BSPC` - Standard keys
 - `KC_LSFT`, `KC_RSFT` - Shift keys
 - `KC_LEFT`, `KC_DOWN`, `KC_UP`, `KC_RGHT` - Arrow keys
+- `KC_MPRV`, `KC_MPLY`, `KC_MNXT` - Media previous/play/next
+- `KC_VOLU`, `KC_VOLD` - Volume up/down
 
 See [QMK Keycodes](https://docs.qmk.fm/#/keycodes) for full reference.
 
