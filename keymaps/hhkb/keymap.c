@@ -15,26 +15,39 @@
  */
 #include QMK_KEYBOARD_H
 
-// Custom 0bgk layout
-// Layer 0: Base layer with ESC/Fn in CAPS position (tap for ESC, hold for Layer 1)
-// Layer 1: Function layer with F-keys and navigation
+// Custom 0bgk layout optimized for Vim users
+// Layer 0: Base layer with CTL_T(ESC) in CAPS position and LT(1,SPC) on Space
+//          - CAPS: Tap for ESC, Hold for Control
+//          - Space: Tap for Space, Hold for Layer 1
+// Layer 1: Function layer with F-keys, navigation, and media controls
+//          - E/C: Volume Up/Down
+//          - S/D/F: Previous/Play/Next track
+//          - H/J/K/L: Vim-style arrow keys
 
-// Optimize tap-hold behavior for fast typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(1, KC_ESC):
-            return 150; // Faster response for ESC/Fn key
+        case LT(1, KC_SPC):
+            return 200;
         default:
             return TAPPING_TERM;
     }
 }
 
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(1, KC_ESC):
-            return false; // Prioritize tap for rapid ESC presses
+        case LT(1, KC_SPC):
+            return false;
         default:
             return false;
+    }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(1, KC_SPC):
+            return 120;
+        default:
+            return 0;
     }
 }
 
@@ -42,16 +55,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
       KC_CAPS,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,
       KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,
-      LT(1,KC_ESC), KC_A,  KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT,
+      CTL_T(KC_ESC), KC_A, KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT,
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, TG(1),
-      KC_TRNS,    KC_LALT, KC_LGUI,                   KC_SPC,                    KC_RGUI, KC_RALT, KC_TRNS
+      KC_TRNS,    KC_LALT, KC_LGUI,                   LT(1,KC_SPC),              KC_RGUI, KC_RALT, KC_TRNS
   ),
 
   [1] = LAYOUT(
       KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13,  KC_PSCR,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_VOLU, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_MPRV, KC_MPLY, KC_MNXT, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_VOLD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_LCTL, KC_TRNS, KC_TRNS,                   KC_TRNS,                   KC_TRNS, KC_TRNS, KC_RCTL
   ),
 };
