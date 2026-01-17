@@ -17,6 +17,7 @@ qmk_firmware/
 *~
 .vscode/
 .idea/
+.claude/
 
 # Build artifacts
 build/
